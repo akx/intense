@@ -72,8 +72,11 @@ export function unpack_cascade(bytes) {
 
     for (let i = 0; i < ntrees; ++i) {
       let idx = 1;
-      for (let j = 0; j < tdepth; ++j)
-        // we use '>> 8' here to perform an integer division: this seems important for performance
+      for (
+        let j = 0;
+        j < tdepth;
+        ++j // we use '>> 8' here to perform an integer division: this seems important for performance
+      ) {
         idx =
           2 * idx +
           (pixels[
@@ -84,10 +87,13 @@ export function unpack_cascade(bytes) {
               ((r + tcodes[root + 4 * idx + 2] * s) >> 8) * ldim +
                 ((c + tcodes[root + 4 * idx + 3] * s) >> 8)
             ]);
+      }
 
       o = o + tpreds[pow2tdepth * i + idx - pow2tdepth];
 
-      if (o <= thresh[i]) return -1;
+      if (o <= thresh[i]) {
+        return -1;
+      }
 
       root += 4 * pow2tdepth;
     }
@@ -117,11 +123,14 @@ export function run_cascade(image, classify_region, params) {
     const step = Math.max(shiftfactor * scale, 1) >> 0; // '>>0' transforms this number to int
     const offset = (scale / 2 + 1) >> 0;
 
-    for (let r = offset; r <= nrows - offset; r += step)
+    for (let r = offset; r <= nrows - offset; r += step) {
       for (let c = offset; c <= ncols - offset; c += step) {
         const q = classify_region(r, c, scale, pixels, ldim);
-        if (q > 0.0) detections.push([r, c, scale, q]);
+        if (q > 0.0) {
+          detections.push([r, c, scale, q]);
+        }
       }
+    }
 
     scale = scale * scalefactor;
   }
@@ -174,7 +183,7 @@ export function cluster_detections(dets, iouthreshold) {
         s = 0.0,
         q = 0.0,
         n = 0;
-      for (let j = i; j < dets.length; ++j)
+      for (let j = i; j < dets.length; ++j) {
         if (calculate_iou(dets[i], dets[j]) > iouthreshold) {
           assignments[j] = 1;
           r = r + dets[j][0];
@@ -183,6 +192,7 @@ export function cluster_detections(dets, iouthreshold) {
           q = q + dets[j][3];
           n = n + 1;
         }
+      }
       // make a cluster representative
       clusters.push([r / n, c / n, s / n, q]);
     }
@@ -197,7 +207,9 @@ export function instantiate_detection_memory(size) {
 	*/
   let n = 0;
   const memory = [];
-  for (let i = 0; i < size; ++i) memory.push([]);
+  for (let i = 0; i < size; ++i) {
+    memory.push([]);
+  }
   /*
 		build a function that:
 		(1) inserts the current frame's detections into the buffer;
@@ -207,7 +219,9 @@ export function instantiate_detection_memory(size) {
     memory[n] = dets;
     n = (n + 1) % memory.length;
     dets = [];
-    for (let i = 0; i < memory.length; ++i) dets = dets.concat(memory[i]);
+    for (let i = 0; i < memory.length; ++i) {
+      dets = dets.concat(memory[i]);
+    }
     //
     return dets;
   }

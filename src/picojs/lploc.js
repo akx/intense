@@ -46,7 +46,7 @@ export function unpack_localizer(bytes) {
       );
       p = p + 4 * Math.pow(2, tdepth) - 4;
       // read the prediction in the leaf nodes of the tree
-      for (let k = 0; k < Math.pow(2, tdepth); ++k)
+      for (let k = 0; k < Math.pow(2, tdepth); ++k) {
         for (let l = 0; l < 2; ++l) {
           dview.setUint8(0, bytes[p + 0]),
             dview.setUint8(1, bytes[p + 1]),
@@ -55,6 +55,7 @@ export function unpack_localizer(bytes) {
           tpreds_ls.push(dview.getFloat32(0, true));
           p = p + 4;
         }
+      }
     }
   }
   const tcodes = new Int8Array(tcodes_ls);
