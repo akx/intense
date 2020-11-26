@@ -133,6 +133,12 @@ function saveImage() {
 }
 
 async function boot() {
+  const info = document.createElement("div");
+  info.id = "info";
+  info.innerText =
+    "Requires a webcam and a face. All processing happens locally. Face detector by @nenadmarkus, intensified by @akx";
+  document.body.appendChild(info);
+
   canvas = document.createElement("canvas");
   canvas.id = "c";
   canvas.width = WIDTH;
