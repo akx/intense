@@ -1,0 +1,18 @@
+{
+  "name": "intense",
+  "version": "0.1.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {},
+  "scripts": {
+    "build": "poi --prod",
+    "start": "poi --serve"
+  },
+  "source": "src/index.js",
+  "devDependencies": {
+    "eslint": "^7.14.0",
+    "eslint-config-prettier": "^6.15.0",
+    "poi": "^12.10.3",
+    "prettier": "^2.2.0"
+  }
+}
