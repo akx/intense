@@ -13,4 +13,5 @@ body {
   border-radius: 50px;
   background: #e6e1d6;
   box-shadow: 20px 20px 60px #c4bfb6, -20px -20px 60px #fffff6;
+  cursor: pointer;
 }

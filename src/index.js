@@ -32,7 +32,7 @@ async function loadPuploc(src) {
   return lploc.unpack_localizer(bytes);
 }
 
-let facefinder_classify_region, do_puploc, eyesImage, ctx;
+let facefinder_classify_region, do_puploc, eyesImage, ctx, canvas;
 let update_memory = pico.instantiate_detection_memory(5);
 
 const params = {
@@ -122,18 +122,32 @@ function loadEyesImage(src) {
   });
 }
 
+function saveImage() {
+  const url = canvas.toDataURL("image/jpeg", 0.9);
+  const downloadLink = document.createElement("a");
+  downloadLink.href = url;
+  downloadLink.download = `intense-${Date.now()}.jpg`;
+  document.body.appendChild(downloadLink);
+  downloadLink.click();
+  setTimeout(() => downloadLink.parentNode.removeChild(downloadLink), 100);
+}
+
 async function boot() {
-  const canvas = document.createElement("canvas");
+  canvas = document.createElement("canvas");
   canvas.id = "c";
   canvas.width = WIDTH;
   canvas.height = HEIGHT;
+  canvas.addEventListener("click", saveImage, false);
+  canvas.title = "Click to download";
   document.body.appendChild(canvas);
   ctx = canvas.getContext("2d");
   [facefinder_classify_region, do_puploc, eyesImage] = await Promise.all([
     loadCascade("data/facefinder.cascade"),
     loadPuploc("data/puploc.bin"),
     loadEyesImage("data/eyes.png"),
-    setupVideoStream(processFrame),
+    setupVideoStream(processFrame).catch((err) =>
+      alert(`Could not set up video: ${err}`)
+    ),
   ]);
 }
 
